@@ -12,7 +12,7 @@ const RegisterUser = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: "User already exists",
+        message: "User already exists, Please Login",
       });
     }
 
@@ -63,7 +63,7 @@ const RegisterUser = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "User registered successfully, Please verify your email",
+      message: "Successfuly signed up, Please verify your email",
       id: createUser.id,
       name: createUser.name,
       emailId: createUser.emailId,
