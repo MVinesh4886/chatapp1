@@ -32,8 +32,6 @@ const RegisterUser = async (req, res) => {
     );
     console.log(Token);
 
-    // createUser.token = Token;
-    // console.log(createUser.token);
     await createUser.save();
 
     const transporter = nodemailer.createTransport({
@@ -67,7 +65,6 @@ const RegisterUser = async (req, res) => {
       id: createUser.id,
       name: createUser.name,
       emailId: createUser.emailId,
-      // password: createUser.password,
       token: Token,
     });
   } catch (error) {
@@ -116,14 +113,11 @@ const LoginUser = async (req, res) => {
           message: "User LoggedIn Successfully",
           data: {
             id: userId,
-            // emailId: existingUser.emailId,
-            // password: existingUser.password,
             token: Token,
           },
         });
       }
     }
-
     return res
       .status(400)
       .json({ success: false, message: "Invalid login credentials" });
