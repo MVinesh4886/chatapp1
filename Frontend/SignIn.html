@@ -3,27 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Expense Register</title>
+    <title>Expense Login</title>
   </head>
-  <link rel="stylesheet" href="./Register.css" />
+  <link rel="stylesheet" href="./Login.css" />
   <body>
-    <form onsubmit="registerUser(event)">
+    <form onsubmit="loginUser(event)">
       <div class="form">
-        <h1 id="register">REGISTER USER</h1>
-        <div>
-          <label class="label" for="name">USER NAME</label>
-          <input
-            class="input-field"
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Enter name"
-            required
-          />
-        </div>
+        <h1 id="login">LOGIN USER</h1>
 
         <div>
-          <label class="label" for="email">USER EMAIL</label>
+          <label class="label" for="email">REGISTERED EMAIL</label>
           <input
             class="input-field"
             type="email"
@@ -45,12 +34,14 @@
           />
         </div>
         <div class="bottom">
-          <a class="login" href="SignIn.html">Go To Login !</a>
-          <button type="submit" id="registerBtn">REGISTER</button>
+          <button type="submit" id="loginBtn">
+            LOGIN NOW <a href="./Expense.html"></a>
+          </button>
+          <button type="button" id="forgotPassword">FORGOT PASSWORD ?</button>
         </div>
       </div>
     </form>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="SignUp.js"></script>
+    <script src="SignIn.js"></script>
   </body>
 </html>
