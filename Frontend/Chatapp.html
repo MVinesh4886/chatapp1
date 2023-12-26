@@ -6,21 +6,19 @@
     <title>ChatApp</title>
   </head>
   <body>
-    <h1>ChatApp</h1>
-    <div id="chatWindow">-</div>
+    <div id="replace">
+      <input type="text" id="group" placeholder="enter group name" />
+      <button id="groupName">Create</button>
+    </div>
+    <div id="container"></div>
+    <div id="chatWindow"></div>
     <form>
       <br />
       <input type="text" id="chat" name="chat" />
       <button id="submit">Send</button>
+      <button id="logout">Logout</button>
     </form>
   </body>
-  <script>
-    document.getElementById("submit").addEventListener("click", sendMessage);
-    function sendMessage(event) {
-      event.preventDefault();
-      let input = document.getElementById("chat").value;
-      console.log(input);
-      document.getElementById("chat").value = "";
-    }
-  </script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="Chatapp.js"></script>
 </html>

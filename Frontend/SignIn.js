@@ -16,6 +16,7 @@ async function loginUser(event) {
       "userDetails",
       JSON.stringify(response.data.data.token)
     );
+    window.location.href = "./Chatapp.html";
   } catch (error) {
     // console.log(error);
     // console.log(error.response.data);
