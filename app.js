@@ -9,6 +9,9 @@ const chatRoute = require("../chatapp/route/chatRoute");
 const groupRoute = require("../chatapp/route/groupRoute");
 const groupMemberRoute = require("../chatapp/route/groupMemberRoute");
 
+User.hasMany(Group); //a User can have multiple groups.
+Group.belongsTo(User); //a group belongs to a single user.
+
 Group.hasMany(GroupMember); //a group can have multiple group members.
 GroupMember.belongsTo(User); //a group member belongs to a single user.
 

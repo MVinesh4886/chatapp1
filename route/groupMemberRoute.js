@@ -8,6 +8,6 @@ const isLogin = require("../middleware/Auth");
 
 groupMemberRoute.post("/addUserToGroup/:id", isLogin, addUserToGroup);
 
-groupMemberRoute.get("/getUserGroup", isLogin, getUserGroup);
+groupMemberRoute.get("/getUserGroup/:id", isLogin, getUserGroup);
 
 module.exports = groupMemberRoute;
