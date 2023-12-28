@@ -28,6 +28,7 @@ async function getCreatedGroup() {
     console.log(response);
     console.log(response.data);
     console.log(response.data.groups);
+
     localStorage.setItem("groups", JSON.stringify(response.data.groups));
     displayGroups();
   } catch (error) {
@@ -65,13 +66,15 @@ async function createGroup(event) {
       }
     );
 
-    groups.push({ GroupName: group, GroupId: response.data.id });
+    groups.push({ GroupName: group, GroupId: response.data.GroupId });
 
     localStorage.setItem("groups", JSON.stringify(groups));
 
     console.log(response);
+    // console.log(response.data.GroupId);
     // console.log(response.data.id);
     alert(response.data.message); // Alert that the group was created successfully
+    displayGroups();
   } catch (error) {
     console.log(error);
     alert(error.response.data.error);
@@ -93,13 +96,13 @@ function displayGroups() {
     const addElement = document.createElement("div");
     addElement.id = "addGroup";
 
+    const groupIdElement = document.createElement("span");
+    groupIdElement.textContent = `Id: ${group.GroupId} ➡️ `;
+    addElement.appendChild(groupIdElement);
+
     const groupNameElement = document.createElement("span");
     groupNameElement.textContent = group.GroupName;
     addElement.appendChild(groupNameElement);
-
-    const groupIdElement = document.createElement("span");
-    groupIdElement.textContent = `              Id: ${group.GroupId}`;
-    addElement.appendChild(groupIdElement);
 
     const openButton = document.createElement("button");
     openButton.textContent = "Open";
@@ -111,7 +114,6 @@ function displayGroups() {
     container.appendChild(addElement);
   });
 }
-//
 //
 //
 //
@@ -161,7 +163,7 @@ function openGroup(groupId, groupName) {
   chatWindow.appendChild(backButton);
 
   function showAddUserForm() {
-    chatWindow.removeChild(addUserButton);
+    // chatWindow.removeChild(addUserButton);
 
     const inputField = document.createElement("input");
     inputField.type = "text";
@@ -170,7 +172,11 @@ function openGroup(groupId, groupName) {
 
     const submitButton = document.createElement("button");
     submitButton.textContent = "Submit";
-    submitButton.addEventListener("click", () => addUserToGroup(groupId));
+    submitButton.addEventListener("click", () => {
+      addUserToGroup(groupId);
+      chatWindow.removeChild(inputField);
+      chatWindow.removeChild(submitButton);
+    });
 
     chatWindow.appendChild(inputField);
     chatWindow.appendChild(submitButton);
@@ -218,11 +224,12 @@ function openGroup(groupId, groupName) {
         }
       );
 
-      console.log(response);
-      console.log(response.data.messages);
+      // console.log(response);
+      // console.log(response.data.messages);
       const messages = response.data.messages;
 
       const chatBox = document.getElementById("chatBox");
+      chatBox.innerHTML = "";
 
       messages.forEach((message) => {
         const messageElement = document.createElement("p");
@@ -234,6 +241,7 @@ function openGroup(groupId, groupName) {
     }
   }
   displayMessages();
+  setInterval(() => displayMessages(), 1000);
 }
 //
 //
