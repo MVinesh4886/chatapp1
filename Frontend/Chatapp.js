@@ -139,7 +139,7 @@ function openGroup(groupId, groupName) {
 
   const bodyWindow = document.createElement("div");
   bodyWindow.id = "chatBox";
-  bodyWindow.innerHTML = `<h3>This is a chat box to chat</h3>`;
+  // bodyWindow.innerHTML = `<h3>This is a chat box to chat</h3>`;
 
   const inputField = document.createElement("input");
   inputField.type = "text";
@@ -210,6 +210,7 @@ function openGroup(groupId, groupName) {
     }
   }
 
+  let lastDisplayedMessageId = null;
   // Function to display messages in the chatbox
   async function displayMessages() {
     try {
@@ -226,21 +227,32 @@ function openGroup(groupId, groupName) {
 
       // console.log(response);
       // console.log(response.data.messages);
+
       const messages = response.data.messages;
 
       const chatBox = document.getElementById("chatBox");
-      chatBox.innerHTML = "";
 
+      // messages.forEach((message) => {
+      //   const messageElement = document.createElement("p");
+      //   messageElement.textContent = message.content;
+      //   chatBox.appendChild(messageElement);
+      // });
       messages.forEach((message) => {
-        const messageElement = document.createElement("p");
-        messageElement.textContent = message.content;
-        chatBox.appendChild(messageElement);
+        if (message.id > lastDisplayedMessageId) {
+          const messageElement = document.createElement("p");
+          messageElement.textContent = message.content;
+          chatBox.appendChild(messageElement);
+        }
       });
+
+      if (messages.length > 0) {
+        lastDisplayedMessageId = messages[messages.length - 1].id;
+      }
     } catch (error) {
       console.log(error);
     }
   }
-  displayMessages();
+  // displayMessages();
   setInterval(() => displayMessages(), 1000);
 }
 //
