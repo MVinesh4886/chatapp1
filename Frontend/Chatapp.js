@@ -150,17 +150,29 @@ function openGroup(groupId, groupName) {
   sendButton.textContent = "Send";
   sendButton.addEventListener("click", () => sendMessageToGroup(groupId));
 
-  const backButton = document.createElement("button");
-  backButton.textContent = "⬅";
+  const backButton = document.createElement("span");
+  backButton.textContent = "🔙";
+  backButton.style.cursor = "pointer";
   backButton.addEventListener("click", () => goBack());
 
+  const showAllUsersButton = document.createElement("button");
+  showAllUsersButton.textContent = "GroupMembers";
+  // showAllUsersButton.id = "groupMembers";
+  showAllUsersButton.addEventListener("click", () => getAllMembers(groupId));
+
+  const groupMembersList = document.createElement("p");
+  groupMembersList.id = "groupMembers";
+
   // bodyWindow.appendChild(header);
+  chatWindow.appendChild(backButton);
   chatWindow.appendChild(addUserButton);
+  chatWindow.appendChild(showAllUsersButton);
+  chatWindow.appendChild(groupMembersList);
+
   chatWindow.appendChild(header);
   chatWindow.appendChild(bodyWindow);
   chatWindow.appendChild(inputField);
   chatWindow.appendChild(sendButton);
-  chatWindow.appendChild(backButton);
 
   function showAddUserForm() {
     // chatWindow.removeChild(addUserButton);
@@ -209,6 +221,46 @@ function openGroup(groupId, groupName) {
       alert(error.response.data.error);
     }
   }
+  async function getAllMembers(groupId) {
+    try {
+      const token = JSON.parse(localStorage.getItem("userDetails"));
+
+      const response = await axios.get(
+        `http://localhost:3000/api/getUserGroup/${groupId}`,
+        // user,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log(response);
+      // console.log(response.data.members);
+
+      const members = response.data.members;
+      // console.log(members);
+      displayMembers(members);
+      // members.forEach((member) => console.log(member.id));
+
+      // console.log(response.data.members.id);
+      // alert(response.data.message);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.error);
+    }
+  }
+
+  function displayMembers(members) {
+    // Assuming there is a container element to display the members
+    const membersContainer = document.getElementById("groupMembers");
+    membersContainer.textContent = ""; // Clear previous content
+
+    members.forEach((member) => {
+      const memberElement = document.createElement("div");
+      memberElement.textContent = `Group Member :${member.id}`; // Assuming each member has a "name" property
+      membersContainer.appendChild(memberElement);
+    });
+  }
 
   let lastDisplayedMessageId = null;
   // Function to display messages in the chatbox
@@ -238,6 +290,8 @@ function openGroup(groupId, groupName) {
       //   chatBox.appendChild(messageElement);
       // });
       messages.forEach((message) => {
+        // const messageId = message.id;
+        // console.log(messageId);
         if (message.id > lastDisplayedMessageId) {
           const messageElement = document.createElement("p");
           messageElement.textContent = message.content;
@@ -252,6 +306,7 @@ function openGroup(groupId, groupName) {
       console.log(error);
     }
   }
+
   // displayMessages();
   setInterval(() => displayMessages(), 1000);
 }

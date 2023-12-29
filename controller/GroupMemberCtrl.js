@@ -41,9 +41,9 @@ const addUserToGroup = async (req, res) => {
 
 const getUserGroup = async (req, res) => {
   try {
-    // const GroupId = req.params.id;
-    const userId = req.params.id;
-    const members = await GroupMember.findAll({ where: { userId } });
+    const GroupId = req.params.id;
+    // const userId = req.params.id;
+    const members = await GroupMember.findAll({ where: { GroupId } });
     res.status(200).json({ members });
   } catch (error) {
     console.error("Error creating message:", error);
