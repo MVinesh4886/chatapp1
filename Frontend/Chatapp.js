@@ -134,7 +134,7 @@ function openGroup(groupId, groupName) {
   header.textContent = groupName;
 
   const addUserButton = document.createElement("button");
-  addUserButton.textContent = "Add User";
+  addUserButton.textContent = "Add User 🙎";
   addUserButton.addEventListener("click", () => showAddUserForm());
 
   const bodyWindow = document.createElement("div");
@@ -156,7 +156,7 @@ function openGroup(groupId, groupName) {
   backButton.addEventListener("click", () => goBack());
 
   const showAllUsersButton = document.createElement("button");
-  showAllUsersButton.textContent = "GroupMembers";
+  showAllUsersButton.textContent = "GroupMembers 🙎";
   // showAllUsersButton.id = "groupMembers";
   showAllUsersButton.addEventListener("click", () => getAllMembers(groupId));
 
@@ -260,6 +260,10 @@ function openGroup(groupId, groupName) {
       memberElement.textContent = `Group Member :${member.id}`; // Assuming each member has a "name" property
       membersContainer.appendChild(memberElement);
     });
+
+    membersContainer.addEventListener("click", function () {
+      membersContainer.textContent = ""; // Clear the content
+    });
   }
 
   let lastDisplayedMessageId = null;
@@ -294,7 +298,7 @@ function openGroup(groupId, groupName) {
         // console.log(messageId);
         if (message.id > lastDisplayedMessageId) {
           const messageElement = document.createElement("p");
-          messageElement.textContent = message.content;
+          messageElement.textContent = `${message.userId} 💬 ${message.content}   `;
           chatBox.appendChild(messageElement);
         }
       });
