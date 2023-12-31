@@ -9,6 +9,10 @@ const GroupMember = db.define("GroupMember", {
     autoIncrement: true,
     allowNull: false,
   },
+  isAdmin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
 module.exports = GroupMember;

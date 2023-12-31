@@ -74,6 +74,7 @@ async function createGroup(event) {
     // console.log(response.data.GroupId);
     // console.log(response.data.id);
     alert(response.data.message); // Alert that the group was created successfully
+    alert(response.data.msg);
     displayGroups();
   } catch (error) {
     console.log(error);
@@ -256,8 +257,33 @@ function openGroup(groupId, groupName) {
     membersContainer.textContent = ""; // Clear previous content
 
     members.forEach((member) => {
-      const memberElement = document.createElement("div");
-      memberElement.textContent = `Group Member :${member.id}`; // Assuming each member has a "name" property
+      console.log(member);
+      const memberElement = document.createElement("li");
+      memberElement.textContent = `${member.userId} ${member.user.name}🙎`;
+
+      const removeButton = document.createElement("button");
+      removeButton.textContent = "Delete";
+      removeButton.addEventListener("click", async () => {
+        try {
+          const token = JSON.parse(localStorage.getItem("userDetails"));
+
+          const deleteResponse = await axios.delete(
+            `http://localhost:3000/api/GroupId/${member.GroupId}/userId/${member.userId}`,
+            // user,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log(deleteResponse);
+          alert(deleteResponse.data.message);
+        } catch (error) {
+          console.log(error);
+          alert(error.response.data.error);
+        }
+      });
+      memberElement.appendChild(removeButton);
       membersContainer.appendChild(memberElement);
     });
 

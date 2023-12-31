@@ -12,10 +12,6 @@ const Group = db.define("Group", {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-  isAdmin: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
 module.exports = Group;

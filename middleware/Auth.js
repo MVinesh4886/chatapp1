@@ -16,7 +16,7 @@ const isLogin = async (req, res, next) => {
 
     if (user) {
       req.user = user;
-      console.log("Id of the decoded User: ", req.user);
+      // console.log("Id of the decoded User: ", req.user);
       next();
     } else {
       return res.json({ message: "User not found" });

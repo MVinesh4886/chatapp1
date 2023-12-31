@@ -12,10 +12,11 @@ const createGroup = async (req, res) => {
     const group = await Group.create({ GroupName, userId });
 
     // Add the group creator as a group member
-    await GroupMember.create({ GroupId: group.id, userId });
+    await GroupMember.create({ GroupId: group.id, userId, isAdmin: true });
 
     res.status(201).json({
       message: "Group created successfully",
+      msg: "You are the creator of the group",
       // group,
       GroupId: group.id,
       GroupName: group.GroupName,
