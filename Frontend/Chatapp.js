@@ -258,11 +258,39 @@ function openGroup(groupId, groupName) {
 
     members.forEach((member) => {
       console.log(member);
+      const isAdmin = member.isAdmin ? "Admin" : "Not an Admin";
+
       const memberElement = document.createElement("li");
-      memberElement.textContent = `${member.userId} ${member.user.name}🙎`;
+      memberElement.textContent = `${member.userId} -- ${member.user.name} -- ${isAdmin}🙎`;
+
+      const adminButton = document.createElement("button");
+      adminButton.textContent = member.isAdmin ? "Remove Admin" : "Make Admin";
+      adminButton.addEventListener("click", async () => {
+        try {
+          const token = JSON.parse(localStorage.getItem("userDetails"));
+          const endpoint = member.isAdmin ? `removeAdmin` : `makeAdmin`;
+
+          const response = await axios.post(
+            `http://localhost:3000/api/${endpoint}/${member.GroupId}/${member.userId}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          console.log(response);
+          alert(response.data.message);
+        } catch (error) {
+          console.log(error);
+          alert(error.response.data.error);
+        }
+      });
+      memberElement.appendChild(adminButton);
 
       const removeButton = document.createElement("button");
-      removeButton.textContent = "Delete";
+      removeButton.textContent = "❎";
       removeButton.addEventListener("click", async () => {
         try {
           const token = JSON.parse(localStorage.getItem("userDetails"));

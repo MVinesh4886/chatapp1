@@ -1,7 +1,7 @@
 require("dotenv").config();
 const db = require("./config/database");
 const User = require("../chatapp/model/User");
-const Chat = require("../chatapp/model/Chat");
+const Messages = require("../chatapp/model/Chat");
 const Group = require("../chatapp/model/Group");
 const GroupMember = require("../chatapp/model/GroupMember");
 const userRoute = require("../chatapp/route/userRoute");
@@ -15,8 +15,8 @@ Group.belongsTo(User); //a group belongs to a single user.
 Group.hasMany(GroupMember); //a group can have multiple group members.
 GroupMember.belongsTo(User); //a group member belongs to a single user.
 
-User.hasMany(Chat); //a user can have multiple chats.
-Chat.belongsTo(Group); //chat belongs to a single group.
+User.hasMany(Messages); //a user can have multiple messages.
+Messages.belongsTo(Group); //messages belongs to a single group.
 
 User.belongsToMany(Group, { through: "GroupMember" }); //a user can belong to multiple groups, and a group can have multiple users.
 Group.belongsToMany(User, { through: "GroupMember" }); //a group can belong to multiple users, and a users can have multiple groups.

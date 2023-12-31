@@ -19,7 +19,7 @@ groupMemberRoute.delete(
   removeGroupMember
 );
 
-groupMemberRoute.post("/makeAdmin/:id", isLogin, makeAdmin);
-groupMemberRoute.post("/removeAdmin/:id", isLogin, removeAdmin);
+groupMemberRoute.post("/makeAdmin/:groupId/:userId", isLogin, makeAdmin);
+groupMemberRoute.post("/removeAdmin/:groupId/:userId", isLogin, removeAdmin);
 
 module.exports = groupMemberRoute;

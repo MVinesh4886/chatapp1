@@ -54,14 +54,15 @@ const addUserToGroup = async (req, res) => {
 
 const makeAdmin = async (req, res) => {
   try {
-    const GroupId = req.params.id;
+    const GroupId = req.params.groupId;
     const group = await Group.findByPk(GroupId);
     if (!group) {
       return res.status(404).json({ error: "Group not found" });
     }
 
     // Check if the user exists in the database
-    const user = await User.findOne({ where: { emailId: req.body.emailId } });
+    // const user = await User.findOne({ where: { emailId: req.body.emailId } });
+    const user = await User.findByPk(req.params.userId);
     // const user = await User.findByPk(req.user.id);
     // console.log(user);
 
@@ -101,16 +102,15 @@ const makeAdmin = async (req, res) => {
 
 const removeAdmin = async (req, res) => {
   try {
-    const GroupId = req.params.id;
+    const GroupId = req.params.groupId;
     const group = await Group.findByPk(GroupId);
     if (!group) {
       return res.status(404).json({ error: "Group not found" });
     }
 
     // Check if the user exists in the database
-    const user = await User.findOne({ where: { emailId: req.body.emailId } });
-    // const user = await User.findByPk(req.user.id);
-    // console.log(user);
+    const user = await User.findByPk(req.params.userId);
+    // const user = await User.findOne({ where: { emailId: req.body.emailId } });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -134,6 +134,13 @@ const removeAdmin = async (req, res) => {
       return res
         .status(400)
         .json({ error: "User is not the member of the group" });
+    }
+
+    // Check if the user being removed is the creator of the group
+    if (existingMember.userId === group.userId) {
+      return res
+        .status(400)
+        .json({ error: "Cannot remove the group creator from admin" });
     }
 
     existingMember.isAdmin = false;
@@ -161,11 +168,6 @@ const removeGroupMember = async (req, res) => {
     const user = await User.findByPk(req.params.userId);
     // console.log("This is the details: ", user);
 
-    // console.log(user.name);
-
-    // const userId = req.user;
-    // console.log("Checking: ", userId);
-
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -188,6 +190,10 @@ const removeGroupMember = async (req, res) => {
       return res
         .status(400)
         .json({ error: "User is not the member of the group" });
+    }
+
+    if (existingMember.userId === group.userId) {
+      return res.status(400).json({ error: "Cannot remove the group creator" });
     }
 
     await existingMember.destroy();
