@@ -132,6 +132,12 @@ function openGroup(groupId, groupName) {
   inputField.id = "groupChat";
   inputField.placeholder = "Type your message";
 
+  const inputField2 = document.createElement("input");
+  inputField2.type = "file";
+  inputField2.id = "file-input";
+
+  // const file = document.getElementById("file-input").files[0];
+
   const sendButton = document.createElement("button");
   sendButton.textContent = "Send";
   sendButton.addEventListener("click", () => sendMessageToGroup(groupId));
@@ -158,6 +164,7 @@ function openGroup(groupId, groupName) {
   chatWindow.appendChild(header);
   chatWindow.appendChild(bodyWindow);
   chatWindow.appendChild(inputField);
+  chatWindow.appendChild(inputField2);
   chatWindow.appendChild(sendButton);
 
   function showAddUserForm() {
