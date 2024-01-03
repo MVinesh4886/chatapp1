@@ -1,3 +1,11 @@
+const socket = io("http://localhost:3000");
+
+socket.on("connect", () => {
+  // console.log(socket);
+  console.log("A user connected to the server");
+  console.log("Id of the socket: ", socket.id);
+});
+
 // let groups = JSON.parse(localStorage.getItem("groups")) || [];
 let groups = [];
 const storedGroups = localStorage.getItem("groups");
@@ -9,8 +17,6 @@ if (storedGroups) {
   }
 }
 
-//
-//
 // Function to fetch the created group from the database
 async function getCreatedGroup() {
   try {
@@ -35,14 +41,7 @@ async function getCreatedGroup() {
     console.log(error);
   }
 }
-//
-//
-//
-//
-//
-//
-//
-//
+
 // Function to create a group
 async function createGroup(event) {
   event.preventDefault();
@@ -81,14 +80,7 @@ async function createGroup(event) {
     alert(error.response.data.error);
   }
 }
-//
-//
-//
-//
-//
-//
-//
-//
+
 function displayGroups() {
   const container = document.getElementById("container");
   container.innerHTML = "";
@@ -115,13 +107,7 @@ function displayGroups() {
     container.appendChild(addElement);
   });
 }
-//
-//
-//
-//
-//
-//
-//
+
 function openGroup(groupId, groupName) {
   console.log("Opened group ID:", groupId);
 
@@ -140,7 +126,6 @@ function openGroup(groupId, groupName) {
 
   const bodyWindow = document.createElement("div");
   bodyWindow.id = "chatBox";
-  // bodyWindow.innerHTML = `<h3>This is a chat box to chat</h3>`;
 
   const inputField = document.createElement("input");
   inputField.type = "text";
@@ -241,8 +226,6 @@ function openGroup(groupId, groupName) {
       const members = response.data.members;
       // console.log(members);
       displayMembers(members);
-      // members.forEach((member) => console.log(member.id));
-
       // console.log(response.data.members.id);
       // alert(response.data.message);
     } catch (error) {
@@ -254,7 +237,7 @@ function openGroup(groupId, groupName) {
   function displayMembers(members) {
     // Assuming there is a container element to display the members
     const membersContainer = document.getElementById("groupMembers");
-    membersContainer.textContent = ""; // Clear previous content
+    membersContainer.textContent = "";
 
     members.forEach((member) => {
       console.log(member);
@@ -339,20 +322,13 @@ function openGroup(groupId, groupName) {
       // console.log(response.data.messages);
 
       const messages = response.data.messages;
-
       const chatBox = document.getElementById("chatBox");
 
-      // messages.forEach((message) => {
-      //   const messageElement = document.createElement("p");
-      //   messageElement.textContent = message.content;
-      //   chatBox.appendChild(messageElement);
-      // });
       messages.forEach((message) => {
-        // const messageId = message.id;
         // console.log(messageId);
         if (message.id > lastDisplayedMessageId) {
           const messageElement = document.createElement("p");
-          messageElement.textContent = `${message.userId} 💬 ${message.content}   `;
+          messageElement.textContent = ` 💬 ${message.content}   `;
           chatBox.appendChild(messageElement);
         }
       });
@@ -364,18 +340,20 @@ function openGroup(groupId, groupName) {
       console.log(error);
     }
   }
+  displayMessages();
 
-  // displayMessages();
-  setInterval(() => displayMessages(), 1000);
+  // setInterval(() => displayMessages(), 1000);
 }
-//
-//
-//
-//
-//
-//
-//
-//
+
+socket.on("message", (message) => {
+  console.log(message);
+  // Append the new message to the chatbox
+  const chatBox = document.getElementById("chatBox");
+  const messageElement = document.createElement("p");
+  messageElement.textContent = `💬 ${message.content}   `;
+  chatBox.appendChild(messageElement);
+});
+
 function goBack() {
   const createSection = document.getElementById("create");
   createSection.style.display = "block";
@@ -383,14 +361,7 @@ function goBack() {
   const chatWindow = document.getElementById("chatWindow");
   chatWindow.innerHTML = "";
 }
-//
-//
-//
-//
-//
-//
-//
-//
+
 async function sendMessageToGroup(groupId) {
   let input = document.getElementById("groupChat").value;
   document.getElementById("groupChat").value = "";
@@ -411,22 +382,17 @@ async function sendMessageToGroup(groupId) {
         },
       }
     );
+    socket.emit("sendMessage", message);
+
     console.log(response);
-    console.log(response.data.message.content);
+    // console.log(response.data.message.content);
   } catch (error) {
     console.log(error);
     // console.log(error.response.data.error);
     alert(error.response.data.error);
   }
 }
-//
-//
-//
-//
-//
-//
-//
-//
+
 // Function to log out
 function logOut(e) {
   e.preventDefault();
@@ -436,9 +402,6 @@ function logOut(e) {
 
 // Event listener for creating a group
 document.getElementById("groupName").addEventListener("click", createGroup);
-
-//Event listener for sending messages
-// document.getElementById("submit").addEventListener("click", sendMessage);
 
 // Event listener for logging out
 document.getElementById("logout").addEventListener("click", logOut);

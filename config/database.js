@@ -1,9 +1,14 @@
 const Sequelize = require("sequelize");
 
-const db = new Sequelize("chatapp", "root", process.env.PASSWORD_KEY, {
-  host: "localhost",
-  dialect: "mysql",
-});
+const db = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USERNAME,
+  process.env.PASSWORD_KEY,
+  {
+    host: process.env.DB_HOST,
+    dialect: "mysql",
+  }
+);
 
 (async () => {
   try {
