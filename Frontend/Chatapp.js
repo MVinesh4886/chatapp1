@@ -118,11 +118,18 @@ function openGroup(groupId, groupName) {
   chatWindow.innerHTML = "";
 
   const header = document.createElement("h2");
+  header.id = "groupName";
   header.textContent = groupName;
 
   const addUserButton = document.createElement("button");
   addUserButton.textContent = "Add User 🙎";
+  addUserButton.id = "addUser";
   addUserButton.addEventListener("click", () => showAddUserForm());
+
+  const inputField2 = document.createElement("input");
+  inputField2.type = "file";
+  inputField2.id = "file-input";
+  inputField2.addEventListener("change", () => uploadFile(groupId));
 
   const bodyWindow = document.createElement("div");
   bodyWindow.id = "chatBox";
@@ -132,14 +139,9 @@ function openGroup(groupId, groupName) {
   inputField.id = "groupChat";
   inputField.placeholder = "Type your message";
 
-  const inputField2 = document.createElement("input");
-  inputField2.type = "file";
-  inputField2.id = "file-input";
-
-  // const file = document.getElementById("file-input").files[0];
-
   const sendButton = document.createElement("button");
   sendButton.textContent = "Send";
+  sendButton.id = "sendButton";
   sendButton.addEventListener("click", () => sendMessageToGroup(groupId));
 
   const backButton = document.createElement("span");
@@ -159,12 +161,15 @@ function openGroup(groupId, groupName) {
   chatWindow.appendChild(backButton);
   chatWindow.appendChild(addUserButton);
   chatWindow.appendChild(showAllUsersButton);
+  chatWindow.appendChild(inputField2);
+
   chatWindow.appendChild(groupMembersList);
 
   chatWindow.appendChild(header);
   chatWindow.appendChild(bodyWindow);
+
   chatWindow.appendChild(inputField);
-  chatWindow.appendChild(inputField2);
+
   chatWindow.appendChild(sendButton);
 
   function showAddUserForm() {
@@ -367,6 +372,47 @@ function goBack() {
 
   const chatWindow = document.getElementById("chatWindow");
   chatWindow.innerHTML = "";
+}
+
+async function uploadFile(groupId) {
+  const fileInput = document.getElementById("file-input");
+  const file = fileInput.files[0];
+
+  if (file) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const token = JSON.parse(localStorage.getItem("userDetails"));
+
+      const response = await axios.post(
+        `http://localhost:3000/api/upload/${groupId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const mediaUrl = response.data.message.content;
+
+      // Append the image to the chat window
+      const chatBox = document.getElementById("chatBox");
+      const imageElement = document.createElement("img");
+      imageElement.src = mediaUrl; // Set the src attribute to the image URL
+      chatBox.appendChild(imageElement);
+
+      // Reset file input
+      fileInput.value = ""; // Reset file input
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.error);
+    }
+  } else {
+    alert("Please select a file to upload.");
+  }
 }
 
 async function sendMessageToGroup(groupId) {
