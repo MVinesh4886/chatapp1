@@ -31,10 +31,10 @@ const getCreatedGroup = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // Find all groups
+    //First: Find all groups
     const groups = await Group.findAll();
 
-    // Filter groups based on user's association
+    //Second: Whoever is joined in the group filter them based on the group-user association (Filter groups based on user's association)
     const userGroups = await Promise.all(
       groups.map(async (group) => {
         const isMember = await GroupMember.findOne({
@@ -49,7 +49,7 @@ const getCreatedGroup = async (req, res) => {
       })
     );
 
-    // Remove undefined values from the array
+    // if there is any undefined values remove from the array by using the filter method
     const filteredGroups = userGroups.filter((group) => group);
 
     res.status(200).json({

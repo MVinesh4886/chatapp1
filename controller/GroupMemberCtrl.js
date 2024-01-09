@@ -38,11 +38,11 @@ const addUserToGroup = async (req, res) => {
         .json({ error: "User already exists in the group" });
     }
 
-    // Add the user to the group
+    // Add the user to the group, and initially user is not admin, he cannot add or remove other members.
     await GroupMember.create({
       GroupId: group.id,
       userId: user.id,
-      isAdmin: true,
+      isAdmin: false,
     });
 
     res.status(200).json({ message: "User added to group successfully" });
@@ -61,9 +61,7 @@ const makeAdmin = async (req, res) => {
     }
 
     // Check if the user exists in the database
-    // const user = await User.findOne({ where: { emailId: req.body.emailId } });
     const user = await User.findByPk(req.params.userId);
-    // const user = await User.findByPk(req.user.id);
     // console.log(user);
 
     if (!user) {
@@ -110,7 +108,6 @@ const removeAdmin = async (req, res) => {
 
     // Check if the user exists in the database
     const user = await User.findByPk(req.params.userId);
-    // const user = await User.findOne({ where: { emailId: req.body.emailId } });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -164,10 +161,10 @@ const removeGroupMember = async (req, res) => {
     }
 
     // Check if the user exists in the database
-    // const user = await User.findOne({ where: { emailId: req.body.emailId } });
     const user = await User.findByPk(req.params.userId);
     // console.log("This is the details: ", user);
 
+    // if there is no user in the database then throw an error
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }

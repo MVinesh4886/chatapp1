@@ -2,7 +2,6 @@ const Message = require("../model/Chat");
 const Group = require("../model/Group");
 const User = require("../model/User");
 const GroupMember = require("../model/GroupMember");
-
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
