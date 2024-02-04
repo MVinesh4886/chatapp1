@@ -9,7 +9,7 @@ const {
   GetAllUsers,
   GetSingleUser,
   DeleteUser,
-} = require("../controller/UserCtrl");
+} = require("../controllers/UserCtrl");
 
 // Register User route
 userRouter.post("/signUp", RegisterUser);

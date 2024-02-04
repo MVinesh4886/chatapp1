@@ -6,8 +6,8 @@ const {
   removeGroupMember,
   makeAdmin,
   removeAdmin,
-} = require("../controller/GroupMemberCtrl");
-const isLogin = require("../middleware/Auth");
+} = require("../controllers/GroupMemberCtrl");
+const isLogin = require("../middlewares/Auth");
 
 groupMemberRoute.post("/addUserToGroup/:id", isLogin, addUserToGroup);
 

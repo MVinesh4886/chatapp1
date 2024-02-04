@@ -4,8 +4,8 @@ const {
   createMessage,
   getMessage,
   uploadFile,
-} = require("../controller/ChatCtrl");
-const isLogin = require("../middleware/Auth");
+} = require("../controllers/ChatCtrl");
+const isLogin = require("../middlewares/Auth");
 
 chatRoute.post("/createMessage/:id", isLogin, createMessage);
 chatRoute.get("/getMessage/:id", isLogin, getMessage);

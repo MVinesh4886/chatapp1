@@ -9,10 +9,10 @@ const Messages = require("../chatapp/model/Chat");
 const Group = require("../chatapp/model/Group");
 const GroupMember = require("../chatapp/model/GroupMember");
 const oldMessage = require("../chatapp/model/ArchivedChat");
-const userRoute = require("../chatapp/route/userRoute");
-const chatRoute = require("../chatapp/route/chatRoute");
-const groupRoute = require("../chatapp/route/groupRoute");
-const groupMemberRoute = require("../chatapp/route/groupMemberRoute");
+const userRoute = require("./routes/userRoute");
+const chatRoute = require("./routes/chatRoute");
+const groupRoute = require("./routes/groupRoute");
+const groupMemberRoute = require("./routes/groupMemberRoute");
 
 const app = express();
 
@@ -53,7 +53,7 @@ app.use("/api", groupRoute);
 app.use("/api", groupMemberRoute);
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, `Frontend/${req.url}`));
+  res.sendFile(path.join(__dirname, `public/${req.url}`));
 });
 
 io.on("connection", (socket) => {
